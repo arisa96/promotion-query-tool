@@ -443,12 +443,15 @@
         // นำ Web App URL ที่ได้จาก Google Apps Script มาใส่ตรงนี้
         const API_URL = "https://script.google.com/macros/s/AKfycbyCRXODVLBBB9tpB5lvrETZZsoeulPi7SbKVLpKIXO_K8_uxC2iqDOUT7y8iouKfqSotQ/exec";
 
-        // โหลดข้อมูลอัตโนมัติจาก Google Sheets เมื่อเปิดหน้าเว็บ (ทุกคนใช้ข้อมูลชุดเดียวกัน)
-        async function loadDataFromCloud() {
-            try {
-                updateStatus("กำลังโหลดข้อมูลจากระบบกลาง...", "โปรดรอสักครู่", "text-indigo-600");
-                const response = await fetch(API_URL);
-                const data = await response.json();
+        // ฟังก์ชันดึงข้อมูลกลางผ่าน JSONP (ป้องกัน CORS สำหรับ User ทั่วไป)
+        function loadDataFromCloud() {
+            updateStatus("กำลังโหลดข้อมูลจากระบบกลาง...", "โปรดรอสักครู่", "text-indigo-600");
+
+            // สร้าง Callback แบบสุ่มเพื่อรับข้อมูล
+            const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+            window[callbackName] = function (data) {
+                delete window[callbackName];
+                document.body.removeChild(script);
 
                 if (data && data.length > 0) {
                     rawDataStore = normalizeImportedData(data);
@@ -458,13 +461,17 @@
                 } else {
                     updateStatus("ยังไม่มีข้อมูลในระบบ", "กรุณารอ Admin อัปโหลดข้อมูล", "text-amber-600");
                 }
-            } catch (err) {
-                console.error(err);
+            };
+
+            const script = document.createElement('script');
+            script.src = `${API_URL}?callback=${callbackName}`;
+            script.onerror = function () {
                 updateStatus("เกิดข้อผิดพลาดในการโหลดข้อมูล", "ไม่สามารถเชื่อมต่อฐานข้อมูลกลางได้", "text-rose-600");
-            }
+            };
+            document.body.appendChild(script);
         }
 
-        // สำหรับ Admin (arisa.thu@ascendcorp.com) เมื่ออัปโหลดไฟล์ จะส่งข้อมูลขึ้น Cloud
+        // สำหรับ Admin เมื่ออัปโหลดไฟล์
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -485,123 +492,20 @@
 
                     updateStatus("กำลังอัปโหลดข้อมูลขึ้นระบบกลาง...", "โปรดรอสักครู่", "text-indigo-600");
 
-                    // ส่งข้อมูลไปบันทึกที่ Google Sheets ผ่าน Apps Script (POST)
+                    // ส่งข้อมูลไปบันทึกที่ Google Sheets
                     await fetch(API_URL, {
                         method: "POST",
-                        mode: "no-cors", // ป้องกันปัญหา CORS เบื้องต้น
-                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(json)
                     });
 
-                    // โหลดข้อมูลใหม่กลับมาแสดงผลทันที
-                    setTimeout(() => {
-                        loadDataFromCloud();
-                    }, 2000);
-
-                } catch (err) {
-                    console.error(err);
-                    updateStatus("Error parsing file!", "Please upload a valid Excel or CSV file", "text-rose-600");
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        // เรียกใช้งานฟังก์ชันโหลดข้อมูลแทน loadSampleData แบบเดิม เมื่อเปิดหน้าเว็บ
-        window.onload = function () {
-            const userEmail = sessionStorage.getItem('userEmail');
-            if (userEmail) {
-                document.getElementById('userInfoDisplay').innerText = `Welcome: ${userEmail}`;
-                if (userEmail.trim().toLowerCase() === 'arisa.thu@ascendcorp.com') {
-                    document.getElementById('uploaderSection').style.display = 'block';
-                    document.getElementById('userStatusSection').style.display = 'none';
-                } else {
-                    document.getElementById('uploaderSection').style.display = 'none';
-                    document.getElementById('userStatusSection').style.display = 'block';
-                }
-            }
-            loadDataFromCloud(); // ดึงข้อมูลจาก Google Sheets แทน
-        };
-
-        let rawDataStore = [];
-        let filteredDataStore = [];
-
-        const sampleData1 = [
-            {
-                "Sub Session ID": "SS179082414340712228",
-                "Name TH": "[01OCT2026] Flash Sale",
-                "Mechanic Type": "flash_sale",
-                "Live Period": "01/10/2026",
-                "Seller Amaze ID": "16083",
-                "Shop Name": "ร้านบุ๊ค",
-                "Product Amaze ID": "5702422",
-                "Variant ID": "",
-                "Product Name": "Red Knuckle Extra Long Version With Special Feature Test Name Length",
-                "Original Price": 970,
-                "Seller Offer Price": 921.5,
-                "Discount (%)": 5,
-                "Amaze Rebate Amount (THB)": 0,
-                "Axtra Rebate Amount (THB)": 0,
-                "SHOPPLUS Rebate (THB)": 0,
-                "Amaze Final Price (THB)": 921.5,
-                "Axtra Final Price (THB)": 921.5,
-                "SHOPPLUS Final Price (THB)": 921.5,
-                "Available Stock": 500,
-                "Promotion Stock": 500,
-                "Status": "pending"
-            }
-        ];
-
-        function updateUploadTimeDisplay(timeStr) {
-            // อัปเดตเวลาให้แสดงผลทั้งฝั่ง Admin และ User ทั่วไป
-            const timeEl1 = document.getElementById("uploadTimeDisplay");
-            const timeEl2 = document.getElementById("userUploadTimeDisplay");
-
-            if (timeEl1) {
-                timeEl1.textContent = `อัปโหลดล่าสุด: ${timeStr}`;
-                timeEl1.classList.remove("hidden");
-            }
-            if (timeEl2) {
-                timeEl2.textContent = `อัปโหลดล่าสุด: ${timeStr}`;
-            }
-        }
-
-        function loadSampleData() {
-            rawDataStore = [...sampleData1];
-            populateDropdownOptions(rawDataStore);
-            updateStatus("Loaded sample dataset", `${rawDataStore.length} items loaded`, "text-indigo-600");
-
-            const nowStr = new Date().toLocaleString('th-TH');
-            updateUploadTimeDisplay(nowStr);
-
-            applyFilters();
-        }
-
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-                    if (json.length === 0) {
-                        updateStatus("Uploaded file is empty!", "No rows found", "text-rose-600");
-                        return;
-                    }
-
-                    rawDataStore = normalizeImportedData(json);
-                    populateDropdownOptions(rawDataStore);
-                    updateStatus(`Uploaded: ${file.name}`, `${rawDataStore.length} rows loaded successfully`, "text-emerald-600");
+                    updateStatus("อัปโหลดสำเร็จ", "บันทึกข้อมูลลงระบบกลางเรียบร้อย", "text-emerald-600");
 
                     const nowStr = new Date().toLocaleString('th-TH');
                     updateUploadTimeDisplay(nowStr);
 
-                    applyFilters();
+                    setTimeout(() => {
+                        loadDataFromCloud();
+                    }, 1500);
 
                 } catch (err) {
                     console.error(err);
@@ -610,6 +514,7 @@
             };
             reader.readAsArrayBuffer(file);
         }
+        // จบการเชื่อม app scripts
 
         function populateDropdownOptions(data) {
             const nameTHSet = new Set();
