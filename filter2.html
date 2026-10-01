@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,16 +21,13 @@
             width: 8px;
             height: 8px;
         }
-
         ::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
-
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 4px;
         }
-
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
@@ -69,20 +65,17 @@
             min-width: var(--col-shop-width);
             max-width: var(--col-shop-width);
         }
-
         .col-freeze-2 {
             left: var(--col-shop-width);
             width: var(--col-product-width);
             min-width: var(--col-product-width);
             max-width: var(--col-product-width);
         }
-
         .col-freeze-3 {
             left: calc(var(--col-shop-width) + var(--col-product-width));
             width: var(--col-nameth-width);
             min-width: var(--col-nameth-width);
         }
-
         .col-freeze-4 {
             left: calc(var(--col-shop-width) + var(--col-product-width) + var(--col-nameth-width));
             width: var(--col-mechanic-width);
@@ -93,13 +86,11 @@
         .bg-row-even {
             background-color: #ffffff !important;
         }
-
         .bg-row-odd {
             background-color: #f8fafc !important;
         }
     </style>
 </head>
-
 <body class="bg-slate-50 text-slate-800 min-h-screen font-sans flex flex-col">
 
     <!-- Navigation / Header -->
@@ -115,13 +106,11 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <span
-                    class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     <span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                     System Ready
                 </span>
-                <button onclick="logout()"
-                    class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm">
+                <button onclick="logout()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm">
                     <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
                 </button>
             </div>
@@ -131,25 +120,17 @@
     <!-- Main Workspace -->
     <main class="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- Step 1: File Source & Control Panel (Admin เห็นช่องอัปโหลด / User ทั่วไปเห็นสถานะและเวลาอัปโหลด) -->
-        <section id="uploaderSection" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
-            style="display: none;">
-            <div
-                class="p-5 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <!-- Step 1: File Source & Control Panel (Admin Only) -->
+        <section id="uploaderSection" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" style="display: none;">
+            <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 class="text-base font-semibold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-file-excel text-emerald-600"></i> Data Source Configuration (Admin Only)
                     </h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Upload your promotion dataset (.xlsx, .xls, .csv) or load
-                        sample data</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Upload your promotion dataset (.xlsx, .xls, .csv) to sync with promotion_database</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button id="loadSampleBtn" onclick="loadSampleData()"
-                        class="px-3.5 py-2 text-xs font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-database"></i> Load Sample Data
-                    </button>
-                    <button id="exportCsvBtn" onclick="exportToCSV()"
-                        class="px-3.5 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors flex items-center gap-1.5 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button id="exportCsvBtn" onclick="exportToCSV()" class="px-3.5 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors flex items-center gap-1.5 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fa-solid fa-file-export"></i> Export Results (.csv)
                     </button>
                 </div>
@@ -158,43 +139,34 @@
             <div class="p-5">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center">
                     <div class="lg:col-span-2">
-                        <label for="fileInput"
-                            class="relative flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl cursor-pointer bg-slate-50 hover:bg-indigo-50/30 transition-all group">
+                        <label for="fileInput" class="relative flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl cursor-pointer bg-slate-50 hover:bg-indigo-50/30 transition-all group">
                             <div class="flex flex-col items-center justify-center pt-3 pb-3">
-                                <i
-                                    class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 group-hover:text-indigo-600 mb-1 transition-colors"></i>
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 group-hover:text-indigo-600 mb-1 transition-colors"></i>
                                 <p class="text-xs text-slate-600 font-medium">Click to upload or drag & drop</p>
                                 <p class="text-[11px] text-slate-400 mt-0.5">Supports .XLSX, .XLS, or .CSV</p>
                             </div>
-                            <input id="fileInput" type="file" class="hidden" accept=".xlsx, .xls, .csv"
-                                onchange="handleFileUpload(event)" />
+                            <input id="fileInput" type="file" class="hidden" accept=".xlsx, .xls, .csv" onchange="handleFileUpload(event)" />
                         </label>
                     </div>
 
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center h-28">
-                        <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Source Status
-                        </div>
-                        <div id="statusMessage" class="text-sm font-semibold text-slate-700 truncate">No file loaded yet
-                        </div>
-                        <div id="statusDetail" class="text-xs text-slate-400 mt-1">Please select a file or click "Load
-                            Sample Data"</div>
+                        <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Source Status</div>
+                        <div id="statusMessage" class="text-sm font-semibold text-slate-700 truncate">No file loaded yet</div>
+                        <div id="statusDetail" class="text-xs text-slate-400 mt-1">Please select a file to sync</div>
                         <div id="uploadTimeDisplay" class="text-[11px] font-medium text-indigo-600 mt-1 hidden"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- สำหรับ User ทั่วไปที่ไม่ใช่ Admin ให้แสดงกล่องแสดงสถานะและเวลาอัปโหลดล่าสุด -->
-        <section id="userStatusSection" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4"
-            style="display: none;">
+        <!-- สำหรับ User ทั่วไป (ปรับข้อความตามที่ต้องการ) -->
+        <section id="userStatusSection" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4" style="display: none;">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
                     <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Dataset Status</div>
-                    <div id="userStatusMessage" class="text-sm font-semibold text-slate-700">
-                        กำลังใช้งานข้อมูลล่าสุดจากระบบ</div>
+                    <div id="userStatusMessage" class="text-sm font-semibold text-emerald-600">กำลังซิงค์ข้อมูลจากระบบ...</div>
                 </div>
-                <div id="userUploadTimeDisplay"
-                    class="text-xs font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                <div id="userUploadTimeDisplay" class="text-xs font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
                     อัปโหลดล่าสุด: -
                 </div>
             </div>
@@ -206,8 +178,7 @@
                 <h2 class="text-base font-semibold text-slate-900 flex items-center gap-2">
                     <i class="fa-solid fa-filter text-indigo-600"></i> Filter & Query Conditions
                 </h2>
-                <button onclick="resetFilters()"
-                    class="text-xs text-slate-500 hover:text-rose-600 transition-colors flex items-center gap-1 font-medium">
+                <button onclick="resetFilters()" class="text-xs text-slate-500 hover:text-rose-600 transition-colors flex items-center gap-1 font-medium">
                     <i class="fa-solid fa-rotate-left"></i> Reset All Filters
                 </button>
             </div>
@@ -217,16 +188,13 @@
                     <label class="block text-xs font-semibold text-slate-700">
                         Query Date & Time (Live Period Check)
                     </label>
-                    <input type="datetime-local" id="filterDateTime" oninput="applyFilters()"
-                        class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800">
-
+                    <input type="datetime-local" id="filterDateTime" oninput="applyFilters()" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800">
+                    
                     <div class="flex flex-wrap gap-1.5 mt-2">
-                        <button type="button" onclick="setPresetDateTime('now')"
-                            class="px-2 py-1 text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors">
+                        <button type="button" onclick="setPresetDateTime('now')" class="px-2 py-1 text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors">
                             Current Time
                         </button>
-                        <button type="button" onclick="clearDateTime()"
-                            class="px-2 py-1 text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors">
+                        <button type="button" onclick="clearDateTime()" class="px-2 py-1 text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors">
                             Clear Date
                         </button>
                     </div>
@@ -237,12 +205,10 @@
                         Shop Name <span class="text-slate-400 font-normal">(Partial Match)</span>
                     </label>
                     <div class="relative">
-                        <span
-                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-store text-xs"></i>
                         </span>
-                        <input type="text" id="filterShopName" placeholder="e.g. ร้านบุ๊ค" oninput="applyFilters()"
-                            class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800 placeholder:text-slate-400">
+                        <input type="text" id="filterShopName" placeholder="e.g. ร้านบุ๊ค" oninput="applyFilters()" class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800 placeholder:text-slate-400">
                     </div>
                 </div>
 
@@ -251,13 +217,10 @@
                         Product Name / ID <span class="text-slate-400 font-normal">(Partial Match)</span>
                     </label>
                     <div class="relative">
-                        <span
-                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-box text-xs"></i>
                         </span>
-                        <input type="text" id="filterProductName" placeholder="e.g. Red Knuckle"
-                            oninput="applyFilters()"
-                            class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800 placeholder:text-slate-400">
+                        <input type="text" id="filterProductName" placeholder="e.g. Red Knuckle" oninput="applyFilters()" class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800 placeholder:text-slate-400">
                     </div>
                 </div>
 
@@ -266,12 +229,10 @@
                         Name TH <span class="text-slate-400 font-normal">(Promotion Name)</span>
                     </label>
                     <div class="relative">
-                        <span
-                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-bullhorn text-xs"></i>
                         </span>
-                        <select id="filterNameTH" onchange="applyFilters()"
-                            class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800">
+                        <select id="filterNameTH" onchange="applyFilters()" class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800">
                             <option value="">-- All Name TH --</option>
                         </select>
                     </div>
@@ -282,12 +243,10 @@
                         Mechanic Type <span class="text-slate-400 font-normal">(Promotion Logic)</span>
                     </label>
                     <div class="relative">
-                        <span
-                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-gear text-xs"></i>
                         </span>
-                        <select id="filterMechanicType" onchange="applyFilters()"
-                            class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800">
+                        <select id="filterMechanicType" onchange="applyFilters()" class="w-full pl-8 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-800">
                             <option value="">-- All Mechanic Types --</option>
                             <option value="price_off">price_off</option>
                             <option value="flash_sale">flash_sale</option>
@@ -313,15 +272,13 @@
             </div>
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <div class="text-xs text-slate-500 font-medium">Active Status Filter</div>
-                <div id="statActivePeriod" class="text-xs font-semibold text-indigo-600 mt-2 truncate">All Live Periods
-                </div>
+                <div id="statActivePeriod" class="text-xs font-semibold text-indigo-600 mt-2 truncate">All Live Periods</div>
             </div>
         </div>
 
-        <!-- Step 3: Table View with Color-Coded Headers -->
+        <!-- Step 3: Table View -->
         <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden w-full">
-            <div
-                class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-slate-50/50">
+            <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-slate-50/50">
                 <h2 class="text-base font-semibold text-slate-900 flex items-center gap-2">
                     <i class="fa-solid fa-table text-indigo-600"></i> Queried Product Promotions
                 </h2>
@@ -332,76 +289,35 @@
 
             <div class="overflow-x-auto max-h-[600px] relative w-full">
                 <table class="w-full text-left border-collapse text-[11px] whitespace-nowrap">
-                    <thead
-                        class="bg-slate-100 text-slate-700 sticky top-0 z-30 font-semibold uppercase tracking-wider text-center">
+                    <thead class="bg-slate-100 text-slate-700 sticky top-0 z-30 font-semibold uppercase tracking-wider text-center">
                         <tr>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col col-freeze-1 text-left">
-                                Shop Name</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col col-freeze-2 text-left">
-                                Product Name</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col-accent col-freeze-3 text-indigo-900 text-left">
-                                Name TH</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col-accent col-freeze-4 text-indigo-900 text-left">
-                                Mechanic Type</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Original
-                                Price</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Seller
-                                Offer</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Discount
-                                (%)</th>
-                            <!-- Group Header: Rebate (สีตามหมวดหมู่) -->
-                            <th colspan="3"
-                                class="py-1 px-2 border-b border-r border-slate-200 text-center text-slate-700 bg-slate-200/70">
-                                Rebate</th>
-                            <!-- Group Header: Final Price (THB) (สีตามหมวดหมู่) -->
-                            <th colspan="3"
-                                class="py-1 px-2 border-b border-r border-slate-200 text-center text-slate-700 bg-slate-200/70">
-                                Final Price (THB)</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Available
-                                Stock</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 text-right font-bold text-emerald-700 bg-slate-100">
-                                Promo Stock</th>
-                            <th rowspan="2"
-                                class="py-2.5 px-2 border-b border-r border-slate-200 text-left font-bold text-indigo-700 bg-indigo-50">
-                                Campaign ID</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col col-freeze-1 text-left">Shop Name</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col col-freeze-2 text-left">Product Name</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col-accent col-freeze-3 text-indigo-900 text-left">Name TH</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 frozen-col-accent col-freeze-4 text-indigo-900 text-left">Mechanic Type</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Original Price</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Seller Offer</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Discount (%)</th>
+                            <th colspan="3" class="py-1 px-2 border-b border-r border-slate-200 text-center text-slate-700 bg-slate-200/70">Rebate</th>
+                            <th colspan="3" class="py-1 px-2 border-b border-r border-slate-200 text-center text-slate-700 bg-slate-200/70">Final Price (THB)</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 text-right bg-slate-100">Available Stock</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-r border-slate-200 text-right font-bold text-emerald-700 bg-slate-100">Promo Stock</th>
+                            <th rowspan="2" class="py-2.5 px-2 border-b border-slate-200 text-left font-bold text-indigo-700 bg-indigo-50">Campaign ID</th>
                         </tr>
                         <tr>
-                            <!-- Sub Headers for Rebate (Amaze: น้ำเงิน, Axtra: เขียว, SHOPPLUS: ส้ม) -->
-                            <th
-                                class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-blue-700 bg-blue-50/50">
-                                Amaze</th>
-                            <th
-                                class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-emerald-700 bg-emerald-50/50">
-                                Axtra</th>
-                            <th
-                                class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-orange-600 bg-orange-50/50">
-                                SHOPPLUS</th>
-                            <!-- Sub Headers for Final Price (Amaze: น้ำเงิน, Axtra: เขียว, SHOPPLUS: ส้ม) -->
-                            <th
-                                class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-blue-800 bg-blue-50/50">
-                                Amaze</th>
-                            <th
-                                class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-emerald-800 bg-emerald-50/50">
-                                Axtra</th>
-                            <th
-                                class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-orange-700 bg-orange-50/50">
-                                SHOPPLUS</th>
+                            <th class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-blue-700 bg-blue-50/50">Amaze</th>
+                            <th class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-emerald-700 bg-emerald-50/50">Axtra</th>
+                            <th class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-orange-600 bg-orange-50/50">SHOPPLUS</th>
+                            <th class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-blue-800 bg-blue-50/50">Amaze</th>
+                            <th class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-emerald-800 bg-emerald-50/50">Axtra</th>
+                            <th class="py-2 px-2 border-b border-r border-slate-200 text-right font-bold text-orange-700 bg-orange-50/50">SHOPPLUS</th>
                         </tr>
                     </thead>
                     <tbody id="resultsTableBody" class="divide-y divide-slate-200 bg-white">
                         <tr>
                             <td colspan="16" class="text-center py-12 text-slate-400">
                                 <i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>
-                                Load a file or click "Load Sample Data" to start querying
+                                กำลังรอข้อมูลจากระบบ...
                             </td>
                         </tr>
                     </tbody>
@@ -418,12 +334,14 @@
     </footer>
 
     <script>
-        window.onload = function () {
+        // แทนที่ด้วย Web App URL ที่ได้จากการ Deploy Google Apps Script ของคุณ
+        const API_URL = "ใส่_Google_Apps_Script_Web_App_URL_ที่นี่";
+
+        window.onload = function() {
             const userEmail = sessionStorage.getItem('userEmail');
             if (userEmail) {
                 document.getElementById('userInfoDisplay').innerText = `Welcome: ${userEmail}`;
-
-                // ตรวจสอบสิทธิ์ Admin แยกส่วน Uploader และ User Status
+                
                 if (userEmail.trim().toLowerCase() === 'arisa.thu@ascendcorp.com') {
                     document.getElementById('uploaderSection').style.display = 'block';
                     document.getElementById('userStatusSection').style.display = 'none';
@@ -432,7 +350,7 @@
                     document.getElementById('userStatusSection').style.display = 'block';
                 }
             }
-            loadSampleData();
+            loadDataFromCloud();
         };
 
         function logout() {
@@ -440,44 +358,69 @@
             window.location.href = 'login.html';
         }
 
-        // นำ Web App URL ที่ได้จาก Google Apps Script มาใส่ตรงนี้
-        const API_URL = "https://script.google.com/macros/s/AKfycbyCRXODVLBBB9tpB5lvrETZZsoeulPi7SbKVLpKIXO_K8_uxC2iqDOUT7y8iouKfqSotQ/exec";
+        let rawDataStore = [];
+        let filteredDataStore = [];
 
-        // ฟังก์ชันดึงข้อมูลกลางผ่าน JSONP (ป้องกัน CORS สำหรับ User ทั่วไป)
+        // ฟังก์ชันดึงข้อมูลกลางผ่าน JSONP จาก Google Sheets (promotion_database)
         function loadDataFromCloud() {
-            updateStatus("กำลังโหลดข้อมูลจากระบบกลาง...", "โปรดรอสักครู่", "text-indigo-600");
+            const userMsgEl = document.getElementById("userStatusMessage");
+            if (userMsgEl) userMsgEl.textContent = "กำลังซิงค์ข้อมูลจาก promotion_database...";
 
-            // สร้าง Callback แบบสุ่มเพื่อรับข้อมูล
             const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-            window[callbackName] = function (data) {
+            window[callbackName] = function(data) {
                 delete window[callbackName];
-                document.body.removeChild(script);
+                if (script.parentNode) {
+                    document.body.removeChild(script);
+                }
 
                 if (data && data.length > 0) {
                     rawDataStore = normalizeImportedData(data);
                     populateDropdownOptions(rawDataStore);
-                    updateStatus("เชื่อมต่อข้อมูลสำเร็จ", `${rawDataStore.length} รายการจากระบบกลาง`, "text-emerald-600");
+                    
+                    // แสดงข้อความตามที่ต้องการเมื่อซิงค์สำเร็จ
+                    const successText = `เชื่อมต่อข้อมูลสำเร็จ (${data.length.toLocaleString()} รายการจาก promotion_database)`;
+                    updateStatus(successText, "ซิงค์ข้อมูลเรียบร้อยแล้ว", "text-emerald-600");
+                    
+                    const userMsg = document.getElementById("userStatusMessage");
+                    if (userMsg) {
+                        userMsg.textContent = successText;
+                        userMsg.className = "text-sm font-semibold text-emerald-600";
+                    }
+
+                    const nowStr = new Date().toLocaleString('th-TH');
+                    updateUploadTimeDisplay(nowStr);
+
                     applyFilters();
                 } else {
-                    updateStatus("ยังไม่มีข้อมูลในระบบ", "กรุณารอ Admin อัปโหลดข้อมูล", "text-amber-600");
+                    updateStatus("ยังไม่มีข้อมูลใน promotion_database", "กรุณารอ Admin อัปโหลดข้อมูล", "text-amber-600");
+                    const userMsg = document.getElementById("userStatusMessage");
+                    if (userMsg) {
+                        userMsg.textContent = "ยังไม่มีข้อมูลใน promotion_database";
+                        userMsg.className = "text-sm font-semibold text-amber-600";
+                    }
                 }
             };
 
             const script = document.createElement('script');
             script.src = `${API_URL}?callback=${callbackName}`;
-            script.onerror = function () {
-                updateStatus("เกิดข้อผิดพลาดในการโหลดข้อมูล", "ไม่สามารถเชื่อมต่อฐานข้อมูลกลางได้", "text-rose-600");
+            script.onerror = function() {
+                updateStatus("เกิดข้อผิดพลาดในการซิงค์ข้อมูล", "ไม่สามารถเชื่อมต่อฐานข้อมูลกลางได้", "text-rose-600");
+                const userMsg = document.getElementById("userStatusMessage");
+                if (userMsg) {
+                    userMsg.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อ promotion_database";
+                    userMsg.className = "text-sm font-semibold text-rose-600";
+                }
             };
             document.body.appendChild(script);
         }
 
-        // สำหรับ Admin เมื่ออัปโหลดไฟล์
+        // สำหรับ Admin เมื่ออัปโหลดไฟล์เพื่อส่งขึ้น Google Sheets
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = async function (e) {
+            reader.onload = async function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
@@ -490,16 +433,15 @@
                         return;
                     }
 
-                    updateStatus("กำลังอัปโหลดข้อมูลขึ้นระบบกลาง...", "โปรดรอสักครู่", "text-indigo-600");
+                    updateStatus("กำลังอัปโหลดข้อมูลขึ้น promotion_database...", "โปรดรอสักครู่", "text-indigo-600");
 
-                    // ส่งข้อมูลไปบันทึกที่ Google Sheets
                     await fetch(API_URL, {
                         method: "POST",
                         body: JSON.stringify(json)
                     });
 
-                    updateStatus("อัปโหลดสำเร็จ", "บันทึกข้อมูลลงระบบกลางเรียบร้อย", "text-emerald-600");
-
+                    updateStatus("อัปโหลดสำเร็จ", "บันทึกข้อมูลลง promotion_database เรียบร้อย", "text-emerald-600");
+                    
                     const nowStr = new Date().toLocaleString('th-TH');
                     updateUploadTimeDisplay(nowStr);
 
@@ -514,7 +456,19 @@
             };
             reader.readAsArrayBuffer(file);
         }
-        // จบการเชื่อม app scripts
+
+        function updateUploadTimeDisplay(timeStr) {
+            const timeEl1 = document.getElementById("uploadTimeDisplay");
+            const timeEl2 = document.getElementById("userUploadTimeDisplay");
+
+            if (timeEl1) {
+                timeEl1.textContent = `อัปโหลดล่าสุด: ${timeStr}`;
+                timeEl1.classList.remove("hidden");
+            }
+            if (timeEl2) {
+                timeEl2.textContent = `อัปโหลดล่าสุด: ${timeStr}`;
+            }
+        }
 
         function populateDropdownOptions(data) {
             const nameTHSet = new Set();
@@ -736,12 +690,10 @@
                         <td class="py-2 px-2 text-right font-semibold text-slate-800 border-b border-r border-slate-100">${formatCurrency(row["Seller Offer Price"])}</td>
                         <td class="py-2 px-2 text-right text-rose-600 font-medium border-b border-r border-slate-100">${row["Discount (%)"]}%</td>
                         
-                        <!-- Rebate Columns (Amaze: น้ำเงิน, Axtra: เขียว, SHOPPLUS: ส้ม) -->
                         <td class="py-2 px-2 text-right font-medium text-blue-700 bg-blue-50/20 border-b border-r border-slate-100">${formatCurrency(row["Amaze Rebate Amount (THB)"])}</td>
                         <td class="py-2 px-2 text-right font-medium text-emerald-700 bg-emerald-50/20 border-b border-r border-slate-100">${formatCurrency(row["Axtra Rebate Amount (THB)"])}</td>
                         <td class="py-2 px-2 text-right font-medium text-orange-600 bg-orange-50/20 border-b border-r border-slate-100">${formatCurrency(row["SHOPPLUS Rebate (THB)"])}</td>
                         
-                        <!-- Final Price Columns (Amaze: น้ำเงิน, Axtra: เขียว, SHOPPLUS: ส้ม) -->
                         <td class="py-2 px-2 text-right font-bold text-blue-800 bg-blue-50/30 border-b border-r border-slate-100">${formatCurrency(row["Amaze Final Price (THB)"])}</td>
                         <td class="py-2 px-2 text-right font-bold text-emerald-800 bg-emerald-50/30 border-b border-r border-slate-100">${formatCurrency(row["Axtra Final Price (THB)"])}</td>
                         <td class="py-2 px-2 text-right font-bold text-orange-700 bg-orange-50/30 border-b border-r border-slate-100">${formatCurrency(row["SHOPPLUS Final Price (THB)"])}</td>
@@ -794,7 +746,7 @@
             const ws = XLSX.utils.json_to_sheet(exportData);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Filtered_Results");
-            XLSX.writeFile(wb, `promotion_query_export_${new Date().toISOString().slice(0, 10)}.csv`, { bookType: 'csv' });
+            XLSX.writeFile(wb, `promotion_query_export_${new Date().toISOString().slice(0,10)}.csv`, { bookType: 'csv' });
         }
 
         function escapeHtml(str) {
@@ -803,5 +755,4 @@
         }
     </script>
 </body>
-
 </html>
