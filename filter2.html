@@ -7,7 +7,7 @@
     <!-- เช็คสิทธิ์การเข้าสู่ระบบก่อนโหลดหน้าเว็บ -->
     <script>
         if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     </script>
     <!-- Tailwind CSS CDN -->
@@ -159,12 +159,12 @@
             </div>
         </section>
 
-        <!-- สำหรับ User ทั่วไป (ปรับข้อความตามที่ต้องการ) -->
+        <!-- สำหรับ User ทั่วไป -->
         <section id="userStatusSection" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4" style="display: none;">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
-                    <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Dataset Status</div>
-                    <div id="userStatusMessage" class="text-sm font-semibold text-emerald-600">กำลังซิงค์ข้อมูลจากระบบ...</div>
+                    <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">DATASET STATUS</div>
+                    <div id="userStatusMessage" class="text-sm font-semibold text-indigo-600">กำลังซิงค์ข้อมูลจาก promotion_database...</div>
                 </div>
                 <div id="userUploadTimeDisplay" class="text-xs font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
                     อัปโหลดล่าสุด: -
@@ -334,7 +334,7 @@
     </footer>
 
     <script>
-        // แทนที่ด้วย Web App URL ที่ได้จากการ Deploy Google Apps Script ของคุณ
+        // *** โปรดระบุ Google Apps Script Web App URL ที่ Deploy เป็น "Anyone" ตรงนี้ ***
         const API_URL = "https://script.google.com/macros/s/AKfycbyCRXODVLBBB9tpB5lvrETZZsoeulPi7SbKVLpKIXO_K8_uxC2iqDOUT7y8iouKfqSotQ/exec";
 
         window.onload = function() {
@@ -355,66 +355,83 @@
 
         function logout() {
             sessionStorage.clear();
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
 
         let rawDataStore = [];
         let filteredDataStore = [];
 
-        // ฟังก์ชันดึงข้อมูลกลางผ่าน JSONP จาก Google Sheets (promotion_database)
-        function loadDataFromCloud() {
+        // ฟังก์ชันดึงข้อมูลจาก Cloud (รองรับทั้ง Fetch และ JSONP)
+        async function loadDataFromCloud() {
             const userMsgEl = document.getElementById("userStatusMessage");
-            if (userMsgEl) userMsgEl.textContent = "กำลังซิงค์ข้อมูลจาก promotion_database...";
+            if (userMsgEl) {
+                userMsgEl.textContent = "กำลังซิงค์ข้อมูลจาก promotion_database...";
+                userMsgEl.className = "text-sm font-semibold text-indigo-600";
+            }
 
+            // 1. ลองดึงข้อมูลด้วย fetch ปกติก่อน
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                if (data && Array.isArray(data)) {
+                    processCloudData(data);
+                    return;
+                }
+            } catch (err) {
+                console.log("Fetch failed, falling back to JSONP...");
+            }
+
+            // 2. หาก fetch ไม่ผ่าน ให้สลับมาใช้ JSONP Fallback ป้องกัน CORS
             const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
             window[callbackName] = function(data) {
                 delete window[callbackName];
                 if (script.parentNode) {
                     document.body.removeChild(script);
                 }
-
-                if (data && data.length > 0) {
-                    rawDataStore = normalizeImportedData(data);
-                    populateDropdownOptions(rawDataStore);
-                    
-                    // แสดงข้อความตามที่ต้องการเมื่อซิงค์สำเร็จ
-                    const successText = `เชื่อมต่อข้อมูลสำเร็จ (${data.length.toLocaleString()} รายการจาก promotion_database)`;
-                    updateStatus(successText, "ซิงค์ข้อมูลเรียบร้อยแล้ว", "text-emerald-600");
-                    
-                    const userMsg = document.getElementById("userStatusMessage");
-                    if (userMsg) {
-                        userMsg.textContent = successText;
-                        userMsg.className = "text-sm font-semibold text-emerald-600";
-                    }
-
-                    const nowStr = new Date().toLocaleString('th-TH');
-                    updateUploadTimeDisplay(nowStr);
-
-                    applyFilters();
-                } else {
-                    updateStatus("ยังไม่มีข้อมูลใน promotion_database", "กรุณารอ Admin อัปโหลดข้อมูล", "text-amber-600");
-                    const userMsg = document.getElementById("userStatusMessage");
-                    if (userMsg) {
-                        userMsg.textContent = "ยังไม่มีข้อมูลใน promotion_database";
-                        userMsg.className = "text-sm font-semibold text-amber-600";
-                    }
-                }
+                processCloudData(data);
             };
 
             const script = document.createElement('script');
             script.src = `${API_URL}?callback=${callbackName}`;
             script.onerror = function() {
                 updateStatus("เกิดข้อผิดพลาดในการซิงค์ข้อมูล", "ไม่สามารถเชื่อมต่อฐานข้อมูลกลางได้", "text-rose-600");
-                const userMsg = document.getElementById("userStatusMessage");
-                if (userMsg) {
-                    userMsg.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อ promotion_database";
-                    userMsg.className = "text-sm font-semibold text-rose-600";
+                if (userMsgEl) {
+                    userMsgEl.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อ promotion_database";
+                    userMsgEl.className = "text-sm font-semibold text-rose-600";
                 }
             };
             document.body.appendChild(script);
         }
 
-        // สำหรับ Admin เมื่ออัปโหลดไฟล์เพื่อส่งขึ้น Google Sheets
+        function processCloudData(data) {
+            if (data && data.length > 0) {
+                rawDataStore = normalizeImportedData(data);
+                populateDropdownOptions(rawDataStore);
+                
+                const successText = `เชื่อมต่อข้อมูลสำเร็จ (${data.length.toLocaleString()} รายการจาก promotion_database)`;
+                updateStatus(successText, "ซิงค์ข้อมูลเรียบร้อยแล้ว", "text-emerald-600");
+                
+                const userMsg = document.getElementById("userStatusMessage");
+                if (userMsg) {
+                    userMsg.textContent = successText;
+                    userMsg.className = "text-sm font-semibold text-emerald-600";
+                }
+
+                const nowStr = new Date().toLocaleString('th-TH');
+                updateUploadTimeDisplay(nowStr);
+
+                applyFilters();
+            } else {
+                updateStatus("ยังไม่มีข้อมูลใน promotion_database", "กรุณารอ Admin อัปโหลดข้อมูล", "text-amber-600");
+                const userMsg = document.getElementById("userStatusMessage");
+                if (userMsg) {
+                    userMsg.textContent = "ยังไม่มีข้อมูลใน promotion_database";
+                    userMsg.className = "text-sm font-semibold text-amber-600";
+                }
+            }
+        }
+
+        // สำหรับ Admin เมื่ออัปโหลดไฟล์ขึ้น Cloud
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -696,7 +713,7 @@
                         
                         <td class="py-2 px-2 text-right font-bold text-blue-800 bg-blue-50/30 border-b border-r border-slate-100">${formatCurrency(row["Amaze Final Price (THB)"])}</td>
                         <td class="py-2 px-2 text-right font-bold text-emerald-800 bg-emerald-50/30 border-b border-r border-slate-100">${formatCurrency(row["Axtra Final Price (THB)"])}</td>
-                        <td class="py-2 px-2 text-right font-bold text-orange-700 bg-orange-50/30 border-b border-r border-slate-100">${formatCurrency(row["SHOPPLUS Final Price (THB)"])}</td>
+                        <td class="py-2 px-2 text-right font-bold text-orange-700 bg-orange-50/30 border-b border-slate-100">${formatCurrency(row["SHOPPLUS Final Price (THB)"])}</td>
                     `;
 
                     if (isFirstRow) {
